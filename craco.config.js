@@ -1,6 +1,12 @@
+const emotionPresetOptions = {};
+
+const emotionBabelPreset = require('@emotion/babel-preset-css-prop').default(undefined, emotionPresetOptions);
+
 module.exports = {
   babel: {
-    presets: ['react-app', '@emotion/babel-preset-css-prop'],
-    plugins: ['@emotion'],
+    plugins: [
+      ...emotionBabelPreset.plugins,
+      // your other plugins
+    ],
   },
 };
