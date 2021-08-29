@@ -6,6 +6,10 @@ import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
+import dotenv from 'dotenv';
+dotenv.config({
+  path: path.join(__dirname, '../config/.env'),
+});
 
 const getYYYYMMDD = () => {
   const rightNow = new Date();
@@ -112,8 +116,24 @@ function createWindow() {
 
   mainWindow.on('closed', () => mainWindow.destroy());
 
-  ipcMain.handle('test', (_event: Electron.IpcMainInvokeEvent, ...args: any[]) => {
+  ipcMain.handle('test', (_event: Electron.IpcMainInvokeEvent, ...args: any): Promise<any> => {
     console.log(`test called!!!! : ${args}`);
+    return Promise.resolve(1);
+  });
+  ipcMain.handle('getFirebaseConfig', async (): Promise<any> => {
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: process.env.FIREBASE_APIKEY,
+      authDomain: process.env.FIREBASE_AUTHDOMAIN,
+      projectId: process.env.FIREBASE_PROJECTID,
+      storageBucket: process.env.FIREBASE_STORAGEBUCKET,
+      messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID,
+      appId: process.env.FIREBASE_APPID,
+      measurementId: process.env.FIREBASE_MEASUREMENTID,
+    };
+    console.log(`getFireBaseConfig: `, firebaseConfig);
+    return firebaseConfig;
   });
 
   // TEST: create crashdump
