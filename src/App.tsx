@@ -3,12 +3,25 @@ import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import TodoList from './features/todos/Todos';
+import { initFirebase } from './firebase';
 
 const App: React.FC = () => {
   useEffect(() => {
-    // test Main IPC communication
-    window?.API?.test('test arg');
-    window?.API?.ipcRenderer.invoke('test', 'invoke test');
+    try {
+      // test Main IPC communication
+      window?.API?.test('test arg').then((v) => console.log('v: ', v));
+      window?.API?.ipcRenderer.invoke('test', 'invoke test');
+
+      const init = async () => {
+        const config = await window?.API?.ipcRenderer.invoke('getFirebaseConfig');
+        console.log('firebaseConfig: ', config);
+        initFirebase(config);
+      };
+
+      init();
+    } catch (e) {
+      console.log(e);
+    }
   }, []);
 
   return (
