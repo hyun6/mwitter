@@ -5,12 +5,12 @@ declare global {
 }
 
 export interface MyApi {
-  test(...args): void;
+  test(...args): Promise<any>;
   crashReporter: {
     addExtraParameter(key: string, value: string);
   };
   ipcRenderer: {
-    invoke(channel, ...args);
+    invoke(channel: string, ...args: any[]): Promise<any> | void;
     send(channel, ...args);
     on(channel, listener);
     once(channel, listener);

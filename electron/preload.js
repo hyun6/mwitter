@@ -30,7 +30,7 @@ const { contextBridge, ipcRenderer, crashReporter } = require('electron');
     ipcRenderer: {
       invoke(channel, ...args) {
         if (validateIPC(channel)) {
-          ipcRenderer.invoke(channel, ...args);
+          return ipcRenderer.invoke(channel, ...args);
         }
       },
       send(channel, ...args) {
