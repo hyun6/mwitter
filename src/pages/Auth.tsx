@@ -1,39 +1,64 @@
 import React, { useState } from 'react';
+import { useForm, useFirebaseAuth } from '../hooks';
 
 const Auth: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formValues, handleFormChange] = useForm({ email: '', password: '', passwordConfirm: '' });
+  const [currentUser, handleSignin, handleLogin] = useFirebaseAuth();
+  const [isRegister, setIsRegister] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
+  const handleEmailLoginClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { email, password } = formValues;
+    if (currentUser) {
+      handleLogin(email, password);
+    } else {
+      handleSignin(email, password);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleGoogleLoginClick = (e: React.MouseEvent) => {
     e.preventDefault();
   };
 
-  const handleGoogleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-  };
-
-  const handleGithubClick = (e: React.MouseEvent) => {
+  const handleGithubLoginClick = (e: React.MouseEvent) => {
     e.preventDefault();
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="enter your email" value={email} onChange={handleChange} />
-        <input type="password" name="password" placeholder="password" value={password} onChange={handleChange} />
-        <input type="submit" value="Log in" />
+      <form onSubmit={handleEmailLoginClick}>
+        <input
+          type="email"
+          name="email"
+          placeholder="enter your email"
+          value={formValues.email}
+          onChange={handleFormChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="password"
+          value={formValues.password}
+          onChange={handleFormChange}
+        />
+        {isRegister && (
+          <input
+            type="password"
+            name="passwordConfirm"
+            placeholder="passwordConfirm"
+            value={formValues.passwordConfirm}
+            onChange={handleFormChange}
+          />
+        )}
+        <input type="submit" value={isRegister ? 'SignIn' : 'LogIn'} />
       </form>
-      <button onClick={handleGoogleClick}>with Google</button>
-      <button onClick={handleGithubClick}>with Github</button>
+      <button name="register" onClick={() => setIsRegister(!isRegister)}>
+        register
+      </button>
+      <div>
+        <button onClick={handleGoogleLoginClick}>with Google</button>
+        <button onClick={handleGithubLoginClick}>with Github</button>
+      </div>
     </>
   );
 };

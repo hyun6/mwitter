@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import TodoList from './features/todos/Todos';
-import { initFirebase } from './firebase';
+import { firebaseService } from './services';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -13,9 +13,9 @@ const App: React.FC = () => {
       window?.API?.ipcRenderer.invoke('test', 'invoke test');
 
       const init = async () => {
-        const config = await window?.API?.ipcRenderer.invoke('getFirebaseConfig');
-        console.log('firebaseConfig: ', config);
-        initFirebase(config);
+        const firebaseOptions = await window?.API?.ipcRenderer.invoke('getFirebaseConfig');
+        console.log('firebaseConfig: ', firebaseOptions);
+        firebaseService.init(firebaseOptions);
       };
 
       init();
