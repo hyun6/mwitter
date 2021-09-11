@@ -13,7 +13,8 @@
     "electron:build": "cross-env NODE_ENV=production && electron-webpack",
     "package": "electron-builder build --win --ia32",
     "package:build": "yarn react:build && yarn electron:build && yarn package",
-    "lint": "eslint ./**/*.ts"
+    "lint": "eslint ./**/*.ts",
+    "test": "jest"
   },
   "dependencies": {
     "@craco/craco": "^6.1.2",
